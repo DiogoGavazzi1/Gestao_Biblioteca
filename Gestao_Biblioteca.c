@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h> // ✅ Necessário para strcmp()
-#include <unistd.h> // ✅ Necessário para o Sleep()
+#include <string.h>
+#include <unistd.h> // Para sleep()
 
 char username[50];
 char password[50];
@@ -10,11 +10,32 @@ char email[100];
 int cargo;
 int idade;
 
+void codigo_confirmacao_admin()
+{
+    char cod_confirmacao_correto[] = "Teste1911#_";
+    char cod_inserido[50];
+
+    printf("------- Confirmacao -------\n");
+    printf("Codigo de Confirmacao: ");
+    scanf("%49s", cod_inserido);
+
+    if (strcmp(cod_inserido, cod_confirmacao_correto) == 0)
+    {
+        printf("Codigo correto! Acesso concedido.\n");
+    }
+    else
+    {
+        printf("Codigo incorreto! Acesso negado.\n");
+        exit(0); // Fecha o programa
+    }
+    printf("---------------------------\n");
+}
+
 void Login()
 {
     printf("======= Login =======\n");
     printf("Username: ");
-    scanf("%49s", username); // limitar a escrita de input a 49 + 1 caracteres
+    scanf("%49s", username);
     printf("Password: ");
     scanf("%49s", password);
     printf("====================\n");
@@ -31,12 +52,29 @@ void Create_Account()
     scanf("%49s", username);
     printf("Email: ");
     scanf("%99s", email);
+    printf("Idade: ");
+    scanf("%d", &idade);
+    printf("Cargo (1 - Admin, 2 - User): ");
+    scanf("%d", &cargo);
+
+    switch (cargo)
+    {
+    case 1:
+        printf("Cargo selecionado: Admin\n");
+        codigo_confirmacao_admin();
+        break;
+    case 2:
+        printf("Cargo selecionado: User\n");
+        break;
+    default:
+        printf("Opcao Invalida, tente novamente!\n");
+        return; // Sai da função
+    }
 
     do
     {
         printf("Password: ");
         scanf("%49s", password);
-
         printf("Confirmar Password: ");
         scanf("%49s", confirmar_password);
 
@@ -44,11 +82,10 @@ void Create_Account()
         {
             printf("As passwords nao sao iguais... tente novamente!\n");
         }
-
     } while (strcmp(password, confirmar_password) != 0);
 
     printf("Conta criada com sucesso!\n");
-    printf("Aguarde ...");
+    printf("Aguarde ...\n");
     sleep(2);
     Login();
 }
